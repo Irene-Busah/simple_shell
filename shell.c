@@ -1,48 +1,29 @@
 #include "shell.h"
 /**
- * shell - Infinite loop that runs shell
- * @ac: Arg count
- * @av: args passed to shell at beginning of prog
- * @env: Environment
- * Return: Void
+ * main - the shell program start point
+ * @ac: int num of command line args
+ * @av: null term'd arr of strs contain args
+ * @ev: null term'd arr of strs contain env vars
+ * Return: int result. 0 in success, everything else is an error
  */
-void shell(int ac, char **av, char **env)
+int main(int ac, char **av, char **ev)
 {
-	char *line;
-	char **args;
-	int status = 1;
-	char *tmp = NULL;
-	char *er;
-	char *filename;
-	int flow;
+	sev_t sev;
+	int exitcode = 0;
+	(void)ac;
+	init_shell_env(&sev, av, ev);
 
-	er = "Error";
-	do {
-		prompt();
-		line = _getline();
-		args = split_line(line);
-		flow = bridge(args[0], args);
-		if (flow == 2)
-		{
-			filename = args[0];
-			args[0] = find_path(args[0], tmp, er);
-			if (args[0] == er)
-			{
-				args[0] = search_cwd(filename, er);
-				if (args[0] == filename)
-					write(1, er, 5);
-			}
-		}
-		if (args[0] != er)
-			status = execute_prog(args, line, env, flow);
-		free(line);
-		free(args);
-	} while (status);
-	if (!ac)
-		(void)ac;
-	if (!av)
-		(void)av;
-	if (!env)
-		(void)env;
+	while (sev.skywalker)
+	{
+		dis_prompt(sev);
+		getcom(&sev);
+		checker_alias(&sev);
+		if (!check_builtin(&sev))
+			actions(&sev);
+		dis_error(&sev);
+	}
+	write_log(&sev);
+	exitcode = sev.error;
+	cl_sev(&sev);
+	return (exitcode);
 }
-
