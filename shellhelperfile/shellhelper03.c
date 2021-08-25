@@ -1,4 +1,5 @@
 #include "../shell.h"
+#include "shellhelper.h"
 
 /**
  * init_shell_env - init shell env vars

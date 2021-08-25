@@ -1,4 +1,5 @@
 #include "../shell.h"
+#include "shellhelper.h"
 
 /**
  * process_inputs - takes in user input and parses for multiple commands.

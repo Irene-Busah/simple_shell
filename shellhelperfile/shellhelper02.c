@@ -1,4 +1,5 @@
 #include "../shell.h"
+#include "shellhelper.h"
 
 /**
  * _getenvironment - get env var

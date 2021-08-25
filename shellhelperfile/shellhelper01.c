@@ -1,4 +1,5 @@
 #include "../shell.h"
+#include "shellhelper.h"
 
 /**
  * sig_hand - handle interrup signal
